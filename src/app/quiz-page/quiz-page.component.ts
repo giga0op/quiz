@@ -16,14 +16,14 @@ export class QuizPageComponent implements OnInit {
     return Object.values((Difficulty))
   }
 
- categories: QuizCategory[] = [];
+  categories: QuizCategory[] = [];
   questions:ViewQuizQuestion[] = [];
   answer: boolean = false;
   num: number = 0;
   points: number = 0;
   correct: number = 0;
   incorrect: number = 0;
-  // answers = [];
+
 
 
   constructor(
@@ -32,7 +32,6 @@ export class QuizPageComponent implements OnInit {
 
   ngOnInit() {
   this.loadCategories().subscribe();
-    console.log(this.difficulties );
   }
 
   checkAnswer(correct_answer: string, your_answer: string) {
@@ -44,10 +43,9 @@ export class QuizPageComponent implements OnInit {
 
 
   start(i) {
-    this.service.getQuiz(i).pipe(tap(res => {
-
-      this.questions=res.filter(x=>!!x).map<ViewQuizQuestion>(element => {
-        const answers=[...element.incorrect_answers,element.correct_answer];
+    this.service.getQuiz(i).subscribe(res => {
+      this.questions = res.filter(x=>!!x).map<ViewQuizQuestion>(element => {
+        const answers = [...element.incorrect_answers,element.correct_answer];
         answers.sort(() => .5 - Math.random());
         return <ViewQuizQuestion>{...element, answers:answers }
       });
@@ -56,13 +54,13 @@ export class QuizPageComponent implements OnInit {
       this.points = 0;
       this.correct = 0;
       this.incorrect = 0;
-    })).subscribe();
+    });
   }
 
   loadCategories() {
    return this.service.getCategories().pipe(tap(res => {
       this.categories = res.filter(x=>!!x);
-    }))
+    }));
   }
 }
 
