@@ -17,7 +17,7 @@
           </div>
           <div class="ans ml-2">
             <ul>
-              <li *ngFor="let answer of questions[num].incorrect_answers"><button class="btn btn-danger" [innerHtml]="answer" (click)="checkAnswer(questions[num].correct_answer, answer)"></button></li>
+              <li *ngFor="let answer of questions[num].answers"><button class="btn btn-danger" [innerHtml]="answer" (click)="checkAnswer(questions[num].correct_answer, answer)"></button></li>
             </ul>
           </div>
         </div>

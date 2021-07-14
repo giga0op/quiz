@@ -17,13 +17,13 @@ export class QuizPageComponent implements OnInit {
   }
 
  categories: QuizCategory[] = [];
-  questions = [];
-  answer = false;
-  num = 0;
-  points = 0;
-  correct = 0;
-  incorrect = 0;
-  answers = [];
+  questions:ViewQuizQuestion[] = [];
+  answer: boolean = false;
+  num: number = 0;
+  points: number = 0;
+  correct: number = 0;
+  incorrect: number = 0;
+  // answers = [];
 
 
   constructor(
@@ -45,12 +45,13 @@ export class QuizPageComponent implements OnInit {
 
   start(i) {
     this.service.getQuiz(i).pipe(tap(res => {
-      const quiz = res;
-      quiz.forEach(element => {
-        element.incorrect_answers.push(element.correct_answer);
-        element.incorrect_answers.sort(() => .5 - Math.random());
+
+      this.questions=res.filter(x=>!!x).map<ViewQuizQuestion>(element => {
+        const answers=[...element.incorrect_answers,element.correct_answer];
+        answers.sort(() => .5 - Math.random());
+        return <ViewQuizQuestion>{...element, answers:answers }
       });
-      this.questions = quiz;
+
       this.num = 0;
       this.points = 0;
       this.correct = 0;
@@ -60,8 +61,12 @@ export class QuizPageComponent implements OnInit {
 
   loadCategories() {
    return this.service.getCategories().pipe(tap(res => {
-      this.categories = res;
+      this.categories = res.filter(x=>!!x);
     }))
   }
+}
+
+export interface ViewQuizQuestion extends QuizQuestion {
+  answers: string[];
 }
 
