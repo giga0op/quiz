@@ -1,0 +1,48 @@
+
+<div class="container mt-5">
+  <div class="d-flex justify-content-center row">
+    <div class="col-md-10 col-lg-10">
+      <div class="border" >
+        <div class="question bg-white p-3 border-bottom">
+          <div class="d-flex flex-row justify-content-between align-items-center mcq">
+            <h4>Quiz</h4>
+            <h4>Good luck</h4>
+            <span>({{num}} of {{questions.length}})</span>
+          </div>
+        </div>
+        <div class="question bg-white p-3 mt-5 border-bottom" *ngIf="questions.length > 0 && num < questions.length else elseBlock">
+          <div class="d-flex flex-row align-items-center question-title">
+            <h3 class="text-danger">Q.</h3>
+            <h5 class="mt-1 ml-2"  [innerHtml]="questions[num].question"></h5>
+          </div>
+          <div class="ans ml-2">
+            <ul>
+              <li *ngFor="let answer of questions[num].incorrect_answers"><button class="btn btn-danger" [innerHtml]="answer" (click)="checkAnswer(questions[num].correct_answer, answer)"></button></li>
+            </ul>
+          </div>
+        </div>
+        <ng-template #elseBlock>
+          <h2>You Score: {{ points }}</h2>
+          <h2>Current: {{correct}}/Incurrent: {{ incorrect }}</h2>
+
+          <form #Form="ngForm" (ngSubmit)="start(Form.value)" class="d-grid justify-content-center my-5">
+
+            <select  class="form-select" ngModel name="category" aria-label="Default select example">
+              <option selected value="">Any Category</option>
+              <option *ngFor="let c of categories" [value]="c.id">{{ c.name | titlecase }}</option>
+            </select>
+            <select  class="form-select my-3" ngModel name="difficulty" aria-label="Default select example">
+              <option selected value="">Any difficulty</option>
+              <option *ngFor="let difficulty of difficulties" [value]="difficulty">{{ difficulty | titlecase}} </option>
+            </select>
+            <button class="btn btn-danger">start</button>
+          </form>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<p *ngFor="let ans of answers">{{ans}}</p>
+
